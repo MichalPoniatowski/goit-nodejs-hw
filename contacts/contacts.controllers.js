@@ -4,6 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("./contacts.services");
 
 const listContactsHandler = async (req, res) => {
@@ -60,7 +61,7 @@ const updateContactHandler = async (req, res) => {
 
 const updateStatusContactHandler = async (req, res) => {
   try {
-    const updatedStatusContact = await updateContact(
+    const updatedStatusContact = await updateStatusContact(
       req.params.contactId,
       req.body
     );

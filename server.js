@@ -1,12 +1,15 @@
-const app = require("./app");
+const { app } = require("./app");
 const db = require("./db");
 const { serverPort } = require("./config");
 
-app.listen(serverPort, async () => {
+(async () => {
   try {
     await db.connect();
-    console.log(`Server running. Use our API on port: ${serverPort} `);
-  } catch (error) {
-    console.log(error.message);
+    console.log("Database connection established.");
+    app.listen(serverPort, async () => {
+      console.log(`Server running. Use our API on port: ${serverPort}`);
+    });
+  } catch (e) {
+    console.error(e.message);
   }
-});
+})();

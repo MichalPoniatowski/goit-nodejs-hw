@@ -1,4 +1,3 @@
-// const express = require("express");
 const { Router } = require("express");
 const {
   listContactsHandler,
@@ -27,10 +26,6 @@ contactsRouter.put(
   updateContactHandler
 );
 
-contactsRouter.patch(
-  "/:contactId/favorite",
-  contactValidationMiddleware,
-  updateStatusContactHandler
-);
+contactsRouter.patch("/:contactId/favorite", updateStatusContactHandler);
 
 module.exports = { contactsRouter };
