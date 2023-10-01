@@ -18,8 +18,14 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
+<<<<<<< Updated upstream
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
+=======
+app.use((error, req, res, next) => {
+  res.status(500).json({ message: error.message });
+});
+>>>>>>> Stashed changes
 
 module.exports = app
