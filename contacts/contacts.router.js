@@ -10,18 +10,26 @@ const {
 
 const { contactValidationMiddleware } = require("./contacts.validators");
 
+const { authMiddleware } = require("../auth/auth.middleware");
+
 const contactsRouter = Router();
 
-contactsRouter.get("/", listContactsHandler);
+contactsRouter.get("/", authMiddleware, listContactsHandler);
 
-contactsRouter.get("/:contactId", getContactByIdHandler);
+contactsRouter.get("/:contactId", authMiddleware, getContactByIdHandler);
 
-contactsRouter.post("/", contactValidationMiddleware, addContactHandler);
+contactsRouter.post(
+  "/",
+  authMiddleware,
+  contactValidationMiddleware,
+  addContactHandler
+);
 
-contactsRouter.delete("/:contactId", removeContactHandler);
+contactsRouter.delete("/:contactId", authMiddleware, removeContactHandler);
 
 contactsRouter.put(
   "/:contactId",
+  authMiddleware,
   contactValidationMiddleware,
   updateContactHandler
 );

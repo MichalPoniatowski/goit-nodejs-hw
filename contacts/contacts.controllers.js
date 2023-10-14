@@ -7,6 +7,8 @@ const {
   updateStatusContact,
 } = require("./contacts.services");
 
+const authService = require("../auth/auth.service");
+
 const listContactsHandler = async (req, res) => {
   try {
     const contacts = await listContacts();
@@ -39,7 +41,9 @@ const removeContactHandler = async (req, res) => {
 
 const addContactHandler = async (req, res) => {
   try {
-    const contact = await addContact(req.body);
+    const userId = req.user._id;
+    console.log("userId", userId);
+    const contact = await addContact({ ...req.body, owner: userId });
     console.log("Returned Contact:", contact);
     return res.status(201).send({ contact });
   } catch (error) {

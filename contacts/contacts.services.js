@@ -1,9 +1,39 @@
 const { Contact } = require("./contacts.model");
+const authService = require("../auth/auth.service");
 
-const listContacts = async () => {
+// const decodedToken = authService.getIdFromToken(token);
+// console.log("DECODED ID:", decodedToken);
+
+// const decodedToken = authService.getIdFromToken(token);
+// console.log("CONTACTS ID TOKEN OWNER", decodedToken);
+const ownerId = "652265357717bdba41796599";
+
+// const userContacts = async (ownerId) => {
+//   const contacts = await Contact.find();
+//   const contactsByOwner = contacts.filter(
+//     (contacts) => contacts.owner === ownerId
+//   );
+
+//   return contactsByOwner;
+// };
+
+const listContacts = async (ownerId) => {
+  // try {
+  //   const contacts = await Contact.find();
+  //   return contacts;
+  // } catch (error) {
+  //   console.log(error.message);
+  //   return [];
+  // }
+
   try {
-    const contacts = await Contact.find();
-    return contacts;
+    const contactsByOwner = await Contact.find({
+      owner: { $exists: true, $eq: ownerId },
+    });
+
+    console.log(contactsByOwner);
+
+    return contactsByOwner;
   } catch (error) {
     console.log(error.message);
     return [];
