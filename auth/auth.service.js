@@ -23,17 +23,16 @@ const verifyToken = (token) => {
   }
 };
 
-const getIdFromToken = (token) => {
-  try {
-    const decodedToken = JWT.decode(token);
-    return decodedToken?._id;
-  } catch (e) {
-    throw new Error("Unable to decode token");
-  }
-};
+// const getIdFromToken = (token) => {
+//   try {
+//     const decodedToken = JWT.decode(token);
+//     return decodedToken?._id;
+//   } catch (e) {
+//     throw new Error("Unable to decode token");
+//   }
+// };
 
 module.exports = {
   generateAccessToken,
   verifyToken,
-  getIdFromToken,
 };

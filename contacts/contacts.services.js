@@ -1,57 +1,29 @@
 const { Contact } = require("./contacts.model");
 const authService = require("../auth/auth.service");
 
-// const decodedToken = authService.getIdFromToken(token);
-// console.log("DECODED ID:", decodedToken);
-
-// const decodedToken = authService.getIdFromToken(token);
-// console.log("CONTACTS ID TOKEN OWNER", decodedToken);
-const ownerId = "652265357717bdba41796599";
-
-// const userContacts = async (ownerId) => {
-//   const contacts = await Contact.find();
-//   const contactsByOwner = contacts.filter(
-//     (contacts) => contacts.owner === ownerId
-//   );
-
-//   return contactsByOwner;
-// };
-
-const listContacts = async (ownerId) => {
-  // try {
-  //   const contacts = await Contact.find();
-  //   return contacts;
-  // } catch (error) {
-  //   console.log(error.message);
-  //   return [];
-  // }
-
+const listContacts = async (userId) => {
   try {
-    const contactsByOwner = await Contact.find({
-      owner: { $exists: true, $eq: ownerId },
-    });
-
-    console.log(contactsByOwner);
-
-    return contactsByOwner;
+    const contactsByUserId = await Contact.find({ owner: userId });
+    return contactsByUserId;
   } catch (error) {
     console.log(error.message);
     return [];
   }
 };
 
-const getContactById = async (id) => {
+const getContactById = async (id, userId) => {
   try {
-    return await Contact.findById(id);
+    const contact = await Contact.findOne({ _id: id, owner: userId });
+    return contact;
   } catch (error) {
     console.log(error.message);
     return null;
   }
 };
 
-const removeContact = async (id) => {
+const removeContact = async (id, userId) => {
   try {
-    return await Contact.findByIdAndDelete(id);
+    return await Contact.findOneAndDelete({ _id: id, owner: userId });
   } catch (error) {
     console.log(error.message);
     return null;
@@ -69,18 +41,26 @@ const addContact = async (contact) => {
   }
 };
 
-const updateContact = async (id, modifiedContact) => {
+const updateContact = async (id, userId, modifiedContact) => {
   try {
-    return await Contact.findByIdAndUpdate(id, modifiedContact, { new: true });
+    return await Contact.findOneAndUpdate(
+      { _id: id, owner: userId },
+      modifiedContact,
+      { new: true }
+    );
   } catch (error) {
     console.log(error.message);
     return null;
   }
 };
 
-const updateStatusContact = async (id, modifiedContact) => {
+const updateStatusContact = async (id, userId, modifiedContact) => {
   try {
-    return await Contact.findByIdAndUpdate(id, modifiedContact, { new: true });
+    return await Contact.findOneAndUpdate(
+      { _id: id, owner: userId },
+      modifiedContact,
+      { new: true }
+    );
   } catch (error) {
     console.log(error.message);
     return null;

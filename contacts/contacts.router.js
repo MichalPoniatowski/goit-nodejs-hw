@@ -34,6 +34,10 @@ contactsRouter.put(
   updateContactHandler
 );
 
-contactsRouter.patch("/:contactId/favorite", updateStatusContactHandler);
+contactsRouter.patch(
+  "/:contactId/favorite",
+  authMiddleware,
+  updateStatusContactHandler
+);
 
 module.exports = { contactsRouter };

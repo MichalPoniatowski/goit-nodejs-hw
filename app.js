@@ -18,6 +18,7 @@ app.use("/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
+  console.log("APP.JS NOT FOUND");
 });
 
 app.use((err, req, res, next) => {

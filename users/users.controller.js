@@ -46,8 +46,8 @@ const loginHandler = async (req, res, next) => {
     await userDao.updateUser(userEntity.email, { token });
     userEntity.token = token;
 
-    const decodedToken = authService.getIdFromToken(token);
-    console.log("DECODED ID:", decodedToken);
+    // const decodedToken = authService.getIdFromToken(token);
+    // console.log("DECODED ID:", decodedToken);
 
     return res.status(200).send({
       user: userPayload,
