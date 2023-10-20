@@ -1,3 +1,4 @@
+const { v4: uuid } = require("uuid");
 const { User } = require("./user.model");
 
 class DuplicatedEmailError extends Error {
@@ -16,7 +17,11 @@ class UnknownDatabaseError extends Error {
 const createUser = async (userData) => {
   try {
     console.log("DAO userData", userData);
-    return await User.create(userData);
+    return await User.create({
+      ...userData,
+      verified: false,
+      verificationToken: uuid(),
+    });
   } catch (e) {
     console.error(e);
 
@@ -28,9 +33,9 @@ const createUser = async (userData) => {
   }
 };
 
-const getUser = async (email) => {
+const getUser = async (filter) => {
   try {
-    return await User.findOne({ email });
+    return await User.findOne(filter);
   } catch (e) {
     console.error(e);
     throw new UnknownDatabaseError();
@@ -46,24 +51,10 @@ const updateUser = async (email, userData) => {
   }
 };
 
-const addAvatar = async (id, userId, modifiedContact) => {
-  try {
-    return await Contact.findOneAndUpdate(
-      { _id: id, owner: userId },
-      modifiedContact,
-      { new: true }
-    );
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
-};
-
 module.exports = {
   createUser,
   getUser,
   updateUser,
-  addAvatar,
   DuplicatedEmailError,
   UnknownDatabaseError,
 };
