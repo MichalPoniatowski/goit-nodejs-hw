@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
   avatarURL: String,
-  veryfied: {
+  verified: {
     type: Boolean,
     default: false,
   },

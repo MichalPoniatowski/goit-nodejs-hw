@@ -161,6 +161,8 @@ const resendVerificationHandler = async (req, res, next) => {
     }
 
     await sendUserVerificationMail(user.email, user.verificationToken);
+
+    return res.status(200).send({ message: "Verification mail send again" });
   } catch (e) {
     return next(e);
   }

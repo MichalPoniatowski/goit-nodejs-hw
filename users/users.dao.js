@@ -33,9 +33,9 @@ const createUser = async (userData) => {
   }
 };
 
-const getUser = async (email) => {
+const getUser = async (filter) => {
   try {
-    return await User.findOne({ email });
+    return await User.findOne(filter);
   } catch (e) {
     console.error(e);
     throw new UnknownDatabaseError();
