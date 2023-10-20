@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
   avatarURL: String,
+  veryfied: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    default: null,
+  },
 });
 
 userSchema.pre("save", async function () {

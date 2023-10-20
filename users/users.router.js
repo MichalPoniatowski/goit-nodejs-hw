@@ -25,6 +25,10 @@ usersRouter.patch(
   usersController.avatarPatchHandler
 );
 
+usersRouter.get("/verify/:verificationToken", usersController.verifyHandler);
+
+usersRouter.post("/verify", usersController.resendVerificationHandler);
+
 module.exports = {
   usersRouter,
 };

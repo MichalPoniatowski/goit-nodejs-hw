@@ -7,6 +7,7 @@ const jimp = require("jimp");
 const mimetype = require("mime-types");
 const multer = require("multer");
 const { serverPort } = require("../config");
+const { sendUserVerificationMail } = require("./user.mailer-service");
 
 const signupHandler = async (req, res, next) => {
   try {
@@ -17,6 +18,11 @@ const signupHandler = async (req, res, next) => {
       password,
       avatarURL,
     });
+
+    await sendUserVerificationMail(
+      createdUser.email,
+      createdUser.verificationToken
+    );
 
     return res.status(201).send({
       user: {
@@ -118,6 +124,48 @@ avatarPatchHandler = async (req, res, next) => {
   }
 };
 
+const verifyHandler = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await userDao.getUser({ verificationToken });
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ message: "Verification token is not valid or expired." });
+    }
+
+    if (user.verified) {
+      return res.status(400).send({ message: "User verified allready" });
+    }
+
+    await userDao.updateUser(user.email, {
+      verified: true,
+      verificationToken: null,
+    });
+
+    return res.status(200).send({ message: "User has been verified." });
+  } catch (e) {}
+};
+
+const resendVerificationHandler = async (req, res, next) => {
+  try {
+    const user = await userDao.getUser({ email: req.body.email });
+
+    if (!user) {
+      return res.status(404).send({ message: "User does not exist!" });
+    }
+
+    if (user.verified) {
+      return res.status(400).send({ message: "User verified allready" });
+    }
+
+    await sendUserVerificationMail(user.email, user.verificationToken);
+  } catch (e) {
+    return next(e);
+  }
+};
+
 module.exports = {
   signupHandler,
   loginHandler,
@@ -125,4 +173,6 @@ module.exports = {
   currentHandler,
   upload,
   avatarPatchHandler,
+  verifyHandler,
+  resendVerificationHandler,
 };
